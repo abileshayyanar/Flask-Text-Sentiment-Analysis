@@ -38,7 +38,8 @@ def home():
         return render_template('home.html')
     else:
         return redirect('/')
-    
+
+# Route to verify user credentials
 @app.route('/login_validation', methods=['POST'])
 def login_validation():
     email = request.form.get('email')
@@ -56,6 +57,7 @@ def login_validation():
     else:
         return redirect('/login')
     
+# Route to add new user to database
 @app.route('/add_user', methods=['POST'])
 def add_user():
     name = request.form.get('uname')
@@ -74,6 +76,7 @@ def add_user():
     session['user_id'] = myuser[0][0]
     return redirect('/home')
 
+# Route to logout
 @app.route('/logout')
 def logout():
     session.pop('user_id')
