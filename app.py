@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, session
 import mysql.connector
-from sentiments import second
+from sentiments import sentiments_bp
 import os
 
 app = Flask(__name__)
@@ -8,8 +8,8 @@ app = Flask(__name__)
 # Initialize user cookies
 app.secret_key = os.urandom(24)
 
-# Blueprint to call second python file
-app.register_blueprint(second)
+# Blueprint to call sentiments python file
+app.register_blueprint(sentiments_bp)
 
 # Establish database connection
 try:
@@ -76,7 +76,7 @@ def add_user():
     session['user_id'] = myuser[0][0]
     return redirect('/home')
 
-# Route to logout
+# Route to logout and clear session
 @app.route('/logout')
 def logout():
     session.pop('user_id')
