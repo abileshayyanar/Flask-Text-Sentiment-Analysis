@@ -105,4 +105,25 @@ class SentimentAnalysis:
 
         neutral_percent = self.percentage(neutral, tweets)
 
+        # Determine average polarity
+        polarity = polarity / tweets
+
+        # Classify overall sentiment based on average polarity
+        overall_sentiment = ""
+        if polarity == 0:
+            overall_sentiment = "Neutral"
+        elif polarity > 0 and polarity <= 0.3:
+            overall_sentiment = "Weak positive"
+        elif polarity > 0.3 and polarity <= 0.6:
+            overall_sentiment = "Positive"
+        elif polarity > 0.6:
+            overall_sentiment = "Strong positive"
+
+        elif polarity < 0 and polarity >= -0.3:
+            overall_sentiment = "Weak negative"
+        elif polarity < -0.6 and polarity >= -0.6:
+            overall_sentiment = "Negative"
+        elif polarity < -0.6:
+            overall_sentiment = "Strong negative"
+
 
