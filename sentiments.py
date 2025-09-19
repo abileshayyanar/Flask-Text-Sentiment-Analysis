@@ -23,6 +23,10 @@ class SentimentAnalysis:
         self.tweets = []
         self.tweetText = []
 
+    # Helper function to clean tweets (remove links and special characters)
+    def cleanTweet(self, tweet):
+        return ' '. join(re.sub(r"(@[A-Za-z0-9_]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
     # Function to connect to tweepy api and download tweet data
     def DownloadData(self, keyword, tweets):
 
@@ -83,8 +87,14 @@ class SentimentAnalysis:
 
             # Write to csv
             csvWriter.writerow([cleanedTweet, analysis.sentiment.polarity])
-        
             csvFile.close()
+
+
+        # Calculate percentages
+        pos_total = pos + strong_pos + weak_pos
+        neg_total = neg + strong_neg + weak_neg
+
+        
 
 
 
