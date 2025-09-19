@@ -26,6 +26,10 @@ class SentimentAnalysis:
     # Helper function to clean tweets (remove links and special characters)
     def cleanTweet(self, tweet):
         return ' '. join(re.sub(r"(@[A-Za-z0-9_]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+    
+    # Helper function to calculate percentage for positive and negative sentiment
+    def percentage(self, part, whole):
+        return (part / whole) * 100
 
     # Function to connect to tweepy api and download tweet data
     def DownloadData(self, keyword, tweets):
@@ -91,11 +95,14 @@ class SentimentAnalysis:
 
 
         # Calculate percentages
-        pos_total = pos + strong_pos + weak_pos
-        neg_total = neg + strong_neg + weak_neg
+        pos_percent = self.percentage(pos, tweets)
+        strong_pos_percent = self.percentage(strong_pos, tweets)
+        weak_pos_percent = self.percentage(weak_pos, tweets)
 
-        
+        neg_percent = self.percentage(neg, tweets)
+        strong_neg_percent = self.percentage(strong_neg, tweets)
+        weak_neg_percent = self.percentage(weak_neg, tweets)
 
-
+        neutral_percent = self.percentage(neutral, tweets)
 
 
