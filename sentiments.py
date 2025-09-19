@@ -58,6 +58,34 @@ class SentimentAnalysis:
         # Use csv writer
         csvWriter = csv.writer(csvFile)
 
+        # clean, append, analyze, and score polarity of each tweet
+        for tweet in self.tweets:
+            cleanedTweet = self.cleanTweet(tweet.text)
+            self.tweetText.append(cleanedTweet)
+            analysis = TextBlob(cleanedTweet)
+            polarity += analysis.sentiment.polarity
+
+            # Categorize polarity
+            if (analysis.sentiment.polarity == 0):
+                neutral += 1
+            elif (0 < analysis.sentiment.polarity <= 0.3):
+                weak_pos += 1
+            elif (0.3 < analysis.sentiment.polarity <= 0.6):
+                pos += 1
+            elif (0.6 < analysis.sentiment.polarity <1):
+                strong_pos += 1
+            elif (-0.3 <= analysis.sentiment.polarity < 0):
+                weak_neg += 1
+            elif (-0.6 <= analysis.sentiment.polarity < 0.3):
+                neg += 1
+            elif (-1 < analysis.sentiment.polarity < -0.6):
+                strong_neg += 1
+
+            # Write to csv
+            csvWriter.writerow([cleanedTweet, analysis.sentiment.polarity])
+        
+            csvFile.close()
+
 
 
 
