@@ -16,6 +16,15 @@ sentiments_bp = Blueprint('sentiments', __name__, static_folder="static", templa
 def sentiment_analyzer():
     return render_template('sentiment_analyzer.html')
 
+@sentiments_bp.route("/sentiment_results", methods=["POST"])
+def sentiment_results():
+    keyword = request.form["keyword"]
+    tweets = request.form["tweets"]
+
+    results = SentimentAnalysis().DownloadData(keyword, tweets)
+
+    return render_template("sentiment_results.html", results = results)
+
 # Main logic
 class SentimentAnalysis:
 
@@ -92,7 +101,8 @@ class SentimentAnalysis:
 
             # Write to csv
             csvWriter.writerow([cleanedTweet, analysis.sentiment.polarity])
-            csvFile.close()
+        # Close csv file
+        csvFile.close()
 
 
         # Calculate percentages
@@ -127,6 +137,19 @@ class SentimentAnalysis:
             overall_sentiment = "Negative"
         elif polarity < -0.6:
             overall_sentiment = "Strong negative"
+
+        return {
+            "keyword": keyword,
+            "polarity": polarity,
+            "overall_sentiment": overall_sentiment,
+            "positive": pos_percent,
+            "strong_positive": strong_pos_percent,
+            "weak_positive": weak_pos_percent,
+            "negative": neg_percent,
+            "strong_negative": strong_neg_percent,
+            "weak_negative": weak_neg_percent,
+            "neutral": neutral_percent
+        }
 
 
     # Create pie chart
