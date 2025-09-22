@@ -6,6 +6,7 @@ import tweepy
 import csv
 from textblob import TextBlob
 import re
+import numpy as np
 
 matplotlib.use('Agg')
 
@@ -112,6 +113,7 @@ class SentimentAnalysis:
         overall_sentiment = ""
         if polarity == 0:
             overall_sentiment = "Neutral"
+
         elif polarity > 0 and polarity <= 0.3:
             overall_sentiment = "Weak positive"
         elif polarity > 0.3 and polarity <= 0.6:
@@ -125,5 +127,15 @@ class SentimentAnalysis:
             overall_sentiment = "Negative"
         elif polarity < -0.6:
             overall_sentiment = "Strong negative"
+
+
+    # Create pie chart
+    def pieChart(self, positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral, keyword):
+        myLabels = ["Positive", "Strong Positive", "Weak Positive", "Negative", "Strong Negative", "Weak Negative", "Neutral"]
+        myValues = [positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral]
+        plt.pie(myValues, labels = myLabels)
+        plt.show()
+        plt.close()
+
 
 
