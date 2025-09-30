@@ -156,9 +156,15 @@ class SentimentAnalysis:
     def pieChart(self, positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral, keyword):
         myLabels = ["Positive", "Strong Positive", "Weak Positive", "Negative", "Strong Negative", "Weak Negative", "Neutral"]
         myValues = [positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral]
-        plt.pie(myValues, labels = myLabels)
-        plt.show()
+        
+        plt.pi(myValues, labesl = myLabels, autopct = "%1.1f%%")
+
+        filename = f"pie_{keyword}.png".replace(" ", "_")
+        filepath = os.path.join("static", filename)
+        plt.savefig(filepath)
         plt.close()
+
+        return filename
 
 
 
