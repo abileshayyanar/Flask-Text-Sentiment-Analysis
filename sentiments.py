@@ -40,6 +40,22 @@ class SentimentAnalysis:
     # Helper function to calculate percentage for positive and negative sentiment
     def percentage(self, part, whole):
         return (part / whole) * 100
+    
+
+    # Function to create pie chart
+    def pieChart(self, positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral, keyword):
+        myLabels = ["Positive", "Strong Positive", "Weak Positive", "Negative", "Strong Negative", "Weak Negative", "Neutral"]
+        myValues = [positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral]
+        
+        plt.pi(myValues, labesl = myLabels, autopct = "%1.1f%%")
+
+        filename = f"pie_{keyword}.png".replace(" ", "_")
+        filepath = os.path.join("static", filename)
+        plt.savefig(filepath)
+        plt.close()
+
+        return filename
+    
 
     # Function to connect to tweepy api and download tweet data
     def DownloadData(self, keyword, tweets):
@@ -138,6 +154,9 @@ class SentimentAnalysis:
         elif polarity < -0.6:
             overall_sentiment = "Strong negative"
 
+        chart_filename = self.pieChart(
+            pos_percent, strong_pos_percent, weak_pos_percent, neg_percent, strong_neg_percent, weak_neg_percent, neutral_percent, keyword)
+
         return {
             "keyword": keyword,
             "polarity": polarity,
@@ -150,21 +169,6 @@ class SentimentAnalysis:
             "weak_negative": weak_neg_percent,
             "neutral": neutral_percent
         }
-
-
-    # Create pie chart
-    def pieChart(self, positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral, keyword):
-        myLabels = ["Positive", "Strong Positive", "Weak Positive", "Negative", "Strong Negative", "Weak Negative", "Neutral"]
-        myValues = [positive, strong_positive, weak_positive, negative, strong_negative, weak_negative, neutral]
-        
-        plt.pi(myValues, labesl = myLabels, autopct = "%1.1f%%")
-
-        filename = f"pie_{keyword}.png".replace(" ", "_")
-        filepath = os.path.join("static", filename)
-        plt.savefig(filepath)
-        plt.close()
-
-        return filename
 
 
 
