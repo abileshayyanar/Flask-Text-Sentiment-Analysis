@@ -25,6 +25,16 @@ def sentiment_results():
 
     return render_template("sentiment_results.html", results = results)
 
+@sentiments_bp.route("/analyze", methods=['POST'])
+def analyze():
+    keyword = request.form.get("keyword")
+    tweets = request.form.get("tweets")
+
+    sa = SentimentAnalysis()
+    results = sa.DownloadData(keyword, tweets)
+    return render_template("sentiment_results.html", results=results)
+
+
 # Main logic
 class SentimentAnalysis:
 
