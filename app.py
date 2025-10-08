@@ -42,6 +42,7 @@ def home():
 # Route to verify user credentials
 @app.route('/login_validation', methods=['POST'])
 def login_validation():
+    global conn
     email = request.form.get('email')
     password = request.form.get('password')
 
@@ -62,6 +63,8 @@ def login_validation():
 # Route to add new user to database
 @app.route('/add_user', methods=['POST'])
 def add_user():
+    global conn
+
     name = request.form.get('uname')
     password = request.form.get('upassword')
     email = request.form.get('uemail')
