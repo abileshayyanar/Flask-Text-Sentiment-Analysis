@@ -45,6 +45,8 @@ def login_validation():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    cursor = conn.cursor()
+
     cursor.execute(
         """SELECT * 
         FROM 'users' 
@@ -63,6 +65,8 @@ def add_user():
     name = request.form.get('uname')
     password = request.form.get('upassword')
     email = request.form.get('uemail')
+
+    cursor = conn.cursor()
 
     cursor.execute(
         """INSERT INTO 'users' ('name', 'email', 'password')
