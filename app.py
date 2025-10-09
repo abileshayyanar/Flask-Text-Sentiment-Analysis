@@ -2,9 +2,13 @@ from flask import Flask, request, render_template, redirect, session
 import mysql.connector
 from mysql.connector import Error
 from sentiments import sentiments_bp
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
+
+# Load .env file
+load_dotenv()
 
 # Initialize user cookies
 app.secret_key = os.urandom(24)
@@ -16,14 +20,14 @@ app.register_blueprint(sentiments_bp)
 def connect_db():
     try:
         conn = mysql.connector.connect(
-            host="localhost", 
-            user="root", 
-            password="Enter you mysql password here", 
-            database="user_db")
+            host="localhost",
+            user="root",
+            password=os.getenv("DB_PASSWORD"),
+            database="user_db"
+        )
         return conn
-        cursor = conn.cursor()
-    except:
-        print("An exception occurred")
+    except Error as e:
+        print(f"Database connection error: {e}")
         return None
     
 
@@ -59,18 +63,17 @@ def login_validation():
     cursor = conn.cursor()
 
     cursor.execute(
-        """SELECT * 
-        FROM users 
-        WHERE email LIKE '{}' AND 'password' LIKE '{}'""".format(email, password))
-    
+        "SELECT * FROM users WHERE email = %s AND password = %s",
+        (email, password)
+    )
     users = cursor.fetchall()
 
     if len(users) > 0:
         session['user_id'] = users[0][0]
         return_value = redirect('/home')
     else:
-        return_value =  redirect('/')
-    
+        return_value = redirect('/')
+
     cursor.close()
     conn.close()
 
@@ -92,17 +95,18 @@ def add_user():
     cursor = conn.cursor()
 
     cursor.execute(
-        """INSERT INTO users (name, email, password)
-        VALUES ('{}', '{}', '{}')""".format(name, email, password))
+        "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+        (name, email, password)
+    )
     conn.commit()
     cursor.execute(
-        """SELECT *
-        FROM users
-        WHERE email LIKE '{}'""".format(email))
+        "SELECT * FROM users WHERE email = %s",
+        (email,)
+    )
     myuser = cursor.fetchall()
     session['user_id'] = myuser[0][0]
 
-    cursor .close()
+    cursor.close()
     conn.close()
 
     return redirect('/home')
