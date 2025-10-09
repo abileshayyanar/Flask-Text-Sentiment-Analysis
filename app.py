@@ -22,7 +22,7 @@ def connect_db():
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
-            password=os.getenv("DB_PASSWORD"),
+            password="new_password",
             database="user_db"
         )
         return conn
